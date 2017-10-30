@@ -2,8 +2,6 @@ language: python
 python:
   - "3.2"
 cache: pip
-install:
-  - pip install -r requirements.txt
 script:
   - cd Assignments/Assignment0/
   - python3 converter_test.py
