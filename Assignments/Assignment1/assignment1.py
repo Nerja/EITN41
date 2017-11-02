@@ -19,13 +19,12 @@ def solve(numbers):
             if(l.luhn_test( re.sub('[X]', str(digit), number) )):
                 solution += str(digit)
                 break
-
-    print(solution)
+    return solution
 
 def main():
     #numbers är en array med ett nummer på varje index
     numbers = read_file('numbers.txt')
-    solve(numbers)
+    print(solve(numbers))
 
 if __name__ == "__main__":
     main()
