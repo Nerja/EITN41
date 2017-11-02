@@ -1,4 +1,4 @@
-__author__ = "Marcus Rodan"
+__author__ = "Marcus Rodan & Niklas Jönsson"
 
 def luhn(nbrs_string):
     nbrs        = list(map(int, nbrs_string))

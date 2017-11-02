@@ -1,4 +1,5 @@
-import format_converter as fc
+__author__ = "Marcus Rodan & Niklas Jönsson"
+
 import luhn as l
 
 import re
@@ -13,9 +14,7 @@ def read_file(filename):
 def solve(numbers):
     solution = ""
     for number in numbers:
-        #print("Number before: {}".format(number)) 
         for digit in range(0, 10):
-            #print("Trying with number: {}".format(re.sub('[X]', str(digit), number)))
             if(l.luhn_test( re.sub('[X]', str(digit), number) )):
                 solution += str(digit)
                 break
@@ -23,7 +22,6 @@ def solve(numbers):
     print(solution)
 
 def main():
-    #numbers är en array med ett nummer på varje index
     numbers = read_file('numbers.txt')
     solve(numbers)
 
