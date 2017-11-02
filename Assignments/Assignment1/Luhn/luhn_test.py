@@ -11,7 +11,7 @@ class TestConverter(unittest.TestCase):
             for i in range(0, 16):
                 missing += [cnbr[i]]
                 cens_cards += [cnbr[:i] + 'X' + cnbr[(i+1):]]
-        found_missing = assignment1.solve(cens_cards)
+        found_missing = main.solve(cens_cards)
         self.assertEqual(list(found_missing), missing)
 
 if __name__ == "__main__":
