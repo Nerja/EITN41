@@ -1,6 +1,6 @@
 import unittest
 import format_converter
-import assignment1
+import main
 
 class TestConverter(unittest.TestCase):
     def test_int_to_hex(self):
