@@ -5,5 +5,5 @@ cache: pip
 script:
   - cd Assignments/Assignment0/
   - python3 converter_test.py
-  - cd ../Assignment1
-  - python3 luhn_test.py 
+  - cd ../Assignment1/Luhn/
+  - python3 luhn_test.py
