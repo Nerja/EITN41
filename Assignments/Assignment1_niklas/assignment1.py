@@ -13,9 +13,9 @@ def read_file(filename):
 def solve(numbers):
     solution = ""
     for number in numbers:
-        print("Number before: {}".format(number))
+        #print("Number before: {}".format(number))
         for digit in range(0, 9):
-            print("Trying with number: {}".format(re.sub('[X]', str(digit), number)))
+            #print("Trying with number: {}".format(re.sub('[X]', str(digit), number)))
             if(l.luhn_test( re.sub('[X]', str(digit), number) )):
                 solution += str(digit)
                 break
