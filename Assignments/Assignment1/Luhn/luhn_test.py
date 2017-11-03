@@ -1,5 +1,4 @@
 import unittest
-import format_converter
 import main
 
 class TestConverter(unittest.TestCase):
