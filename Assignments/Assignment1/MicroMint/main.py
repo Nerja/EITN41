@@ -4,30 +4,30 @@ import simulation as s
 import numpy as np
 import sys
 
-def run_case(u, k, c):
-    num_runs = 100
+def compute_conf_int(observations):
     lam = 3.77
+    n   = len(observations)
+    return 2 * lam * np.std(np.array(observations))/(n ** 0.5)
+    
+def run_case(u, k, c, des_width):
     results = []
-    print("Starting simulation with u={}, k={} and c={}".format(u, k, c))
-    for i in range(0, num_runs):
+    print("Starting simulation with u={}, k={}, c={} and width={}".format(u, k, c, des_width))
+    run     = True
+    i       = 0
+    while run:
         results.append(s.start_simulation(u, k, c))
-        sys.stdout.write('.')
-        sys.stdout.flush()
-    print()
+        conf_width = compute_conf_int(results)
+        i = i + 1
+        if conf_width < des_width and i > 2:
+            run = False
     print("Mean Coin Throws: {}".format(np.mean(results)))
 
 def main():
+    params_list = [(16, 2, 1, 22), (16, 2, 100, 24), (16, 2, 10000, 22), (20, 7, 1, 79671), (20, 7, 100, 15616), (20, 7, 10000, 4783)]
 
-    num_coins_to_test = [1, 100, 10000]
-    u_k = [[16, 20], [2, 7]]
-
-    for i in range(0, len(u_k)):
-        u = u_k[0][i]
-        k = u_k[1][i]
-        for j in range(0, len(num_coins_to_test)):
-            results = []
-            c = num_coins_to_test[j]
-            run_case(u, k, c)
+    results = []
+    for p in params_list:
+        run_case(p[0], p[1], p[2], p[3])        
 
 if __name__ == "__main__":
     main()
