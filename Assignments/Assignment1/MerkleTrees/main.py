@@ -18,9 +18,17 @@ def main():
     index = index_and_leafs[:2]
     leafs = index_and_leafs[2:]
 
-    mt.compute_tree(leafs)
-    
+    tree = mt.compute_tree(leafs)
+    path = mt.compute_path(tree, index[0])
 
+    print(root_and_merkle(tree, path, int(index[1])))
+
+def merkle_node_at_depth(path, depth):
+    return path[len(path) - depth]
+
+#konkatenera noden med root
+def root_and_merkle(tree, path, depth):
+    return merkle_node_at_depth(path, depth) + tree[len(tree)-1][0]
 
 if __name__ == "__main__":
     main()
