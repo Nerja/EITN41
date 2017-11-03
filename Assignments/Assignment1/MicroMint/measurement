@@ -1,0 +1,13 @@
+Starting simulation with u=16, k=2, c=1 and width=22
+Mean Coin Throws: 320.8836304700162 used 3085 iterations
+Starting simulation with u=16, k=2, c=100 and width=24
+Mean Coin Throws: 3689.7690492245447 used 2966 iterations
+Starting simulation with u=16, k=2, c=10000 and width=22
+Mean Coin Throws: 45265.417429637164 used 2949 iterations
+Starting simulation with u=20, k=7, c=1 and width=79671
+Mean Coin Throws: 473947.27536231885 used 69 iterations
+Starting simulation with u=20, k=7, c=100 and width=15616
+Mean Coin Throws: 1073425.4925373134 used 67 iterations
+Starting simulation with u=20, k=7, c=10000 and width=4783
+Mean Coin Throws: 2422970.1428571427 used 35 iterations
+
