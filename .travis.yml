@@ -7,3 +7,5 @@ script:
   - python3 converter_test.py
   - cd ../Assignment1/Luhn/
   - python3 luhn_test.py
+  - cd ../MerkleTrees/
+  - python3 merkle_test.py

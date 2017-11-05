@@ -10,18 +10,26 @@ def read_file(filename):
             lines.append(line.rstrip())
     return lines
 
-def main():
+def merkle_root():
     merkle_lines = read_file('example.txt')
-    print("Result: {}".format(mt.compute_merkle_root(merkle_lines)))
+    return mt.compute_merkle_root(merkle_lines)
 
-    index_and_leafs = read_file('leaf.txt')
+def part2(file):
+    index_and_leafs = read_file(file)
     index = index_and_leafs[:2]
     leafs = index_and_leafs[2:]
 
     tree = mt.compute_tree(leafs)
     path = mt.compute_path(tree, index[0])
 
-    print(root_and_merkle(tree, path, int(index[1])))
+    return root_and_merkle(tree, path, int(index[1]))
+
+def main():
+    #Part 1
+    print("Result merkle root(Part 1): {}".format(merkle_root()))
+
+    #Part 2
+    print(part2('leaf.txt'))
 
 def merkle_node_at_depth(path, depth):
     return path[len(path) - depth]

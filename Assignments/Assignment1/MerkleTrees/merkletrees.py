@@ -5,10 +5,10 @@ import numpy as np
 
 def compute_merkle_root(node_array):
     for i in range(1, len(node_array)):
-        if node_array[i][:1] == 'L':
-            node_array[i] = fc.hash_bytearray(fc.hex_to_bytearray(node_array[i][1:] + node_array[i-1]))
-        else: #antar att det är ett R, går att kolla med else if istället
-            node_array[i] = fc.hash_bytearray(fc.hex_to_bytearray(node_array[i-1] + node_array[i][1:]))
+        if node_array[i][:1] == 'L': #Append to current node
+            node_array[i] = transform_func(node_array[i][1:] + node_array[i-1])
+        else: #Prepend to current node
+            node_array[i] = transform_func(node_array[i-1] + node_array[i][1:])
     return node_array[len(node_array) - 1]
 
 def compute_tree(leafs):
