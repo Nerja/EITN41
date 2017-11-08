@@ -1,39 +1,54 @@
 import random as r
 import math as m
+import format_converter as fc
+
+import bank
+import alice
+
 __author__ = "Marcus Rodan & Niklas Jönsson"
 
-def generate_2k(k, n):
-    return [(r.randint(1, n), r.randint(1, n), r.randint(1, n), r.randint(1, n)) for i in range(2*k)]
 
-def compute_xi(quad):
-    print(quad)
-    return 1
+#https://brilliant.org/wiki/extended-euclidean-algorithm/
+def egcd(a, b):
+    x,y, u,v = 0,1, 1,0
+    while a != 0:
+        q, r = b//a, b%a
+        m, n = x-u*q, y-v*q
+        b,a, x,y, u,v = a,r, u,v, m,n
+    gcd = b
+    return x
+    #return gcd, x, y
 
-def compute_yi(quad, id):
-    #print(quad + id)
-    return 2
-
-def compute_xi_yi(quads, id):
-    x = list(map(compute_xi, quads))
-    y = list(map(lambda quad: compute_yi(quad, id), quads))
-    return x, y
-
-def gcd(a, b):
-    return m.gcd(a, b)
+def compute_rsa_params():
+    #n = 20
+    #e = 3
+    n = 143
+    e = 7
+    d = 103
+    print(d)
+    return n, e, d
 
 def main():
     k   = 2
-    n   = 1000000000
-    id  = 1337
 
+    #RSA
+    #n = r.randint(123456,234567)
+    n, e, d = compute_rsa_params()
+
+    max_rand_value   = n - 1
     # Client generates 2k (ai, ci, di, ri)
-    quads = generate_2k(k, n)
-    #print(quads)
+    a_quads, a_x, a_y, a_b, a_id = alice.compute_values(k, max_rand_value, n, e)
 
-    # Generate xi, yi for quads
-    x, y = compute_xi_yi(quads, id)
+    # Save Alice b to bank
+    bank_b = a_b
 
-    #print(x, y)
+    #SEND ALL B TO BANK
+    R = bank.generate_r(k)
 
+    coin_sig = bank.send_data([(i, a_quads[i]) for i in R], bank_b, a_id, n, e, d, R)
+    S = alice.extract_S([a_quads[i][3] for i in range(2*k) if i not in R], coin_sig, n)
+    #SEND ALL QUADS WITH INDEX R
+    print(coin_sig)
+    print(S)
 if __name__ == "__main__":
     main()

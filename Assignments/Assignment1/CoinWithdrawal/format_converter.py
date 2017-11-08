@@ -11,6 +11,9 @@ def int_to_hex(int_nbr):
 def int_to_bytearray(int_nbr, n_bytes):
     return bytearray(int_nbr.to_bytes(n_bytes, byteorder= 'big'))
 
+def int2bytearray(input):
+    return input.to_bytes((input.bit_length() + 7) // 8, 'big')
+
 def hex_to_int(hex_nbr):
     return int(hex_nbr, 16)
 
