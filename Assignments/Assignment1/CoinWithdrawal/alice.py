@@ -7,12 +7,12 @@ import numpy
 __author__ = "Marcus Rodan & Niklas Jönsson"
 
 
-def generate_2k(k, mrv, modn):
-    return [(r.randint(1, mrv) % modn, r.randint(1, mrv) % modn, r.randint(1, mrv) % modn, r.randint(1, mrv) % modn) for i in range(2*k)]
+def generate_2k(k, modn):
+    return [(r.randint(1, modn-1), r.randint(1, modn-1), r.randint(1, modn-1), r.randint(1, modn-1)) for i in range(2*k)]
 
-def compute_values(k, mrv, n, e):
+def compute_values(k, n, e):
     id = 1337
-    quads = generate_2k(k, mrv, n)
+    quads = generate_2k(k, n)
 
     # Generate xi, yi for quads
     x, y = common.compute_xi_yi(quads, id)
@@ -21,5 +21,6 @@ def compute_values(k, mrv, n, e):
     return quads, x, y, b, id
 
 def extract_S(r_list, coin_sig, n):
-    r_prod = numpy.prod(r_list)
-    return (coin_sig * (r_prod ** -1)) % n;
+    r_prod  = numpy.prod(r_list)
+    r_inv   = common.egcd(r_prod, n) % n
+    return (coin_sig * r_inv) % n

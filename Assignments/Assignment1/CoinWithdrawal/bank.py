@@ -27,5 +27,5 @@ def send_data(quads, bank_b, id, n, e, d, R):
     indices_not_in_R = [i for i in range(len(bank_b)) if i not in R]
     bank_s = 1
     for i in range(len(indices_not_in_R)):
-        bank_s *= (bank_b[indices_not_in_R[i]] ** d) % n
-    return bank_s
+        bank_s *= (bank_b[indices_not_in_R[i]] ** d)
+    return bank_s % n

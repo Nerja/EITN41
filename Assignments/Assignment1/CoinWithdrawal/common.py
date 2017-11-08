@@ -4,6 +4,17 @@ import format_converter as fc
 
 __author__ = "Marcus Rodan & Niklas Jönsson"
 
+#https://brilliant.org/wiki/extended-euclidean-algorithm/
+def egcd(a, b):
+    x,y, u,v = 0,1, 1,0
+    while a != 0:
+        q, r = b//a, b%a
+        m, n = x-u*q, y-v*q
+        b,a, x,y, u,v = a,r, u,v, m,n
+    gcd = b
+    return x
+    #return gcd, x, y
+
 def compute_xi(quad):
     return h(quad[0], quad[1])
     #h(ai || ci)
