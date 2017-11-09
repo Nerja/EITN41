@@ -16,6 +16,7 @@ class Merchant:
     def generate_z(self):
         self.z = [r.randint(0,1) for i in range(self.k)]
 
+
     def send_z_to_alice(self, alice):
         alice.receive_z(self.z)
 

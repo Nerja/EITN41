@@ -35,7 +35,6 @@ class Bank:
             self.R.append(avail_indices[j])
             avail_indices = avail_indices[:j] + avail_indices[j+1:]
 
-
     def request_quads_from_alice(self, alice):
         alice.send_quads_to_bank(self, self.R)
 

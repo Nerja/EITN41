@@ -38,6 +38,8 @@ class Alice:
         if any([m.gcd(q[3], self.n) != 1 for q in self.quads]): #The extended Euclidean algorithm is particularly useful when a and b are coprime
             self.generate_2k()
 
+
+
     def compute_bi(self):
         self.x, self.y = common.compute_xi_yi(self.quads, self.id)
         self.b = common.compute_bi(self.quads, self.x, self.y, self.e, self.n)
@@ -66,14 +68,14 @@ class Alice:
 
     def send_z_answer(self, merchant):
         quads_not_in_R = [self.quads[i] for i in range(2*self.k) if i not in self.R]
-        a_x_not_in_R = [self.x[i] for i in range(2*self.k) if i not in self.R]
-        a_y_not_in_R = [self.y[i] for i in range(2*self.k) if i not in self.R]
+        x_not_in_R = [self.x[i] for i in range(2*self.k) if i not in self.R]
+        y_not_in_R = [self.y[i] for i in range(2*self.k) if i not in self.R]
         z_answer = []
         for i in range(len(quads_not_in_R)):
             if self.z[i] == 0:
-                z_answer.append((self.x[i], quads_not_in_R[i][0] ^ self.id, quads_not_in_R[i][2]))
+                z_answer.append((x_not_in_R[i], quads_not_in_R[i][0] ^ self.id, quads_not_in_R[i][2]))
             else:
-                z_answer.append((self.y[i], quads_not_in_R[i][0], quads_not_in_R[i][1]))
+                z_answer.append((y_not_in_R[i], quads_not_in_R[i][0], quads_not_in_R[i][1]))
         merchant.receive_z_answer(z_answer)
 
     def debug_print(self):

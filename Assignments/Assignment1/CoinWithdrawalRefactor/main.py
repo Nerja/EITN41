@@ -25,6 +25,7 @@ def start_simulation(alice, bank, merchant):
         alice.calculate_serial()
         alice.debug_print()
 
+        #Extra Steps
         alice.send_serial_to_merchant(merchant)
         merchant.generate_z()
         merchant.send_z_to_alice(alice)
