@@ -4,41 +4,28 @@ import format_converter as fc
 import common
 import numpy
 
-
 __author__ = "Marcus Rodan & Niklas Jönsson"
-
 
 class Alice:
 
-    def __init__(self, k, n, e):
+    def __init__(self, k):
         self.k = k
-        self.n = n
-        self.e = e
-
         self.id = 1337
 
-        #self.quads = []
-        #self.x = []
-        #self.y = []
-        #self.b = []
-
-        #self.R = []
-
-        #self.blind_sig = 0
-        #self.coin_serial = 0
-
+    def request_public_rsa(self, bank):
+        self.n, self.e = bank.send_public_rsa()
 
     def generate_2k(self):
+        # Client generates 2k (ai, ci, di, ri)
         self.quads = [(r.randint(1, self.n-1),
                        r.randint(1, self.n-1),
                        r.randint(1, self.n-1),
                        r.randint(1, self.n-1)
                        ) for i in range(2*self.k)]
-
-        if any([m.gcd(q[3], self.n) != 1 for q in self.quads]): #The extended Euclidean algorithm is particularly useful when a and b are coprime
+        #The extended Euclidean algorithm is particularly useful when a and b are coprime
+        #we will use the algorithm with a = product of r:s, b = n so we need gcd(prod r, n) == 1
+        if(m.gcd(numpy.prod([q[3] for q in self.quads]), self.n) != 1):
             self.generate_2k()
-
-
 
     def compute_bi(self):
         self.x, self.y = common.compute_xi_yi(self.quads, self.id)
@@ -58,6 +45,7 @@ class Alice:
     def calculate_serial(self):
         r_prod = numpy.prod([self.quads[i][3] for i in range(2*self.k) if i not in self.R])
         r_inv = common.egcd(r_prod, self.n) % self.n
+        #print("a = {}, b = {}, inv = {}".format(r_prod, self.n, r_inv))
         self.coin_serial = (self.blind_sig * r_inv) % self.n
 
     def send_serial_to_merchant(self, merchant):
@@ -81,8 +69,3 @@ class Alice:
     def debug_print(self):
         print("Blind Signature: {}".format(self.blind_sig))
         print("Coin Serial:     {}".format(self.coin_serial))
-
-    #def extract_S(r_list, coin_sig, n):
-    #    r_prod  = numpy.prod(r_list)
-    #    r_inv   = common.egcd(r_prod, n) % n
-    #    return (coin_sig * r_inv) % n

@@ -30,7 +30,6 @@ def h(input1, input2):
     return fc.hash_bytearray(fc.int2bytearray(input1) + fc.int2bytearray(input2));
 
 def f(x_i, y_i):
-    #return fc.bytearray_to_int(fc.hash_bytearray(fc.hex_to_bytearray(x_i) + fc.hex_to_bytearray(y_i)))
     x_bytearray = fc.hex_to_bytearray(x_i)
     y_bytearray = fc.hex_to_bytearray(y_i)
     return fc.hex_to_int(fc.hash_bytearray(x_bytearray + y_bytearray))

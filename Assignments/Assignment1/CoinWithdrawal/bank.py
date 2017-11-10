@@ -7,21 +7,20 @@ import common
 __author__ = "Marcus Rodan & Niklas Jönsson"
 
 class Bank:
-    def __init__(self, n, e, d):
-        self.n = n
-        self.e = e
-        self.d = d
-
-        #self.alice_b = []
-        #self.R = []
-        #self.requested_quads = []
-        #self.alice_id = 0
-
-        #self.blind_sig = 0
+    def __init__(self):
+        self.compute_rsa_params()
 
     def receive_b(self, b, id):
         self.alice_b = b
         self.alice_id = id
+
+    def send_public_rsa(self):
+        return self.n, self.e
+
+    def compute_rsa_params(self):
+        self.n = 493
+        self.e = 5
+        self.d = 269
 
     def receive_quads(self, quads):
         self.requested_quads = quads
