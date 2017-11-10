@@ -26,22 +26,15 @@ def compute_tree(nodes, tree_struct=[]):
         layer = list(map(lambda i: transform_func(nodes[i] + nodes[i+1]),range(0, len(nodes)-1, 2)))
         return compute_tree(layer, (tree_struct + [layer]))
 
-
-def compute_path(tree, leaf_nbr):
-    leaf_nbr = int(leaf_nbr)
-
-    path = [tree[0][leaf_nbr]]
-    #len(tree) nbr av layers, men len(tree) är depth då root noden är ett lager men räknas som depth 0
-    for i in range (0, len(tree) - 1):
-        if leaf_nbr % 2 > 0:
-            path.append('L' + tree[i][leaf_nbr-1])
-            #Sibling leaf is LEFT leaf and this is RIGHT leaf
-        else:
-            path.append('R' + tree[i][leaf_nbr+1])
-            #Sibling leaf is RIGHT leaf and this is LEFT leaf'
-        leaf_nbr = int(leaf_nbr / 2)
-
-    return path
+def compute_path(tree, leaf_nbr, path=[]):
+    if not path:
+        path = [tree[0][leaf_nbr]]
+    if len(tree) <= 1:
+        return path
+    elif leaf_nbr % 2 == 1:
+        return compute_path(tree[1:], int(leaf_nbr/2), path + ['L' + tree[0][leaf_nbr-1]])
+    else:
+        return compute_path(tree[1:], int(leaf_nbr/2), path + ['R' + tree[0][leaf_nbr+1]])
 
 def transform_func(hex):
     return fc.hash_bytearray(fc.hex_to_bytearray(hex))

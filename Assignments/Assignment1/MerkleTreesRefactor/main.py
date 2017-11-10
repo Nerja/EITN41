@@ -22,10 +22,10 @@ def part2(file):
 
 def main():
     #Part 1
-    #print("Result merkle root(Part 1): {}".format(merkle_root('example.txt')))
+    print("Result merkle root(Part 1): {}".format(merkle_root('example.txt')))
 
     #Part 2
-    print(part2('smallexample'))
+    print(part2('leaf.txt'))
 
 def merkle_node_at_depth(path, depth):
     return path[len(path) - depth]
