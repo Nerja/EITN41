@@ -1,8 +1,9 @@
 __author__ = "Niklas Jönsson & Marcus Rodan"
 
-def compute_for_one_bit(SA, DA, SB, DB, M):
-    xored = (int(SA) ^ int(SB)) ^ int(DA) ^ int(DB)
-    if int(M == 1):
-        xored += 1
+def compute_for_one_bit(SA, DA, SB, DB, M, b):
+    my_msg = int(SA) ^ int(SB)
+    if int(M) == 1:
+        my_msg = (my_msg + 1) % 2
 
-    return str(xored % 2)
+    my_msg = my_msg ^ int(DA) ^ int(DB)
+    return str(my_msg)

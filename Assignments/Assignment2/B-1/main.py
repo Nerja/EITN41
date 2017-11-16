@@ -12,7 +12,7 @@ def compute(argv):
 
     output = ""
     for i in range(len(SA)):
-        output += dc.compute_for_one_bit(SA[i], DA[i], SB[i], DB[i], M[i])
+        output += dc.compute_for_one_bit(SA[i], DA[i], SB[i], DB[i], M[i], b)
 
     return fc.binary_to_hex(output).zfill(4)
 
