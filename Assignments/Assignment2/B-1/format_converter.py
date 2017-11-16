@@ -17,6 +17,12 @@ def int2bytearray(input):
 def hex_to_int(hex_nbr):
     return int(hex_nbr, 16)
 
+def hex_to_binary(hex_nbr):
+    return bin(int(hex_nbr, 16))[2:].zfill(len(hex_nbr) * 4)
+
+def binary_to_hex(binary_nbr):
+    return hex(int(binary_nbr, 2))[2:]
+
 def hex_to_bytearray(hex_nbr):
     return bytearray.fromhex(hex_nbr)
 
