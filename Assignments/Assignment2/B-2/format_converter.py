@@ -34,3 +34,6 @@ def hash_bytearray(byte_array):
 
 def hash_hex(hex):
     return hashlib.sha1(hex).hexdigest()
+
+def ip_to_hex(ip):
+    return ''.join([hex(int(x)+256)[3:] for x in ip.split('.')])
