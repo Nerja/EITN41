@@ -8,6 +8,7 @@ def main(nazir_ip, mix_ip, nbr_partners, data):
     capfile = savefile.load_savefile(testcap, layers=2, verbose=True)
 
     distinct_outgoing_sets_with_nazir_src, all_outgoing_sets_with_nazir_src = learn(nazir_ip, mix_ip, capfile, nbr_partners)
+
     ips = exclude(distinct_outgoing_sets_with_nazir_src, all_outgoing_sets_with_nazir_src)
 
     print("Found the following partners of Nazir:")
@@ -30,10 +31,9 @@ def learn(nazir_ip, mix_ip, data, m):
     found_nazir = 0
 
     for pkt in data.packets:
-        timestamp = pkt.timestamp
+
         ip_src = pkt.packet.payload.src.decode('UTF8')
         ip_dst = pkt.packet.payload.dst.decode('UTF8')
-
 
         if ip_src == nazir_ip:
             found_nazir = 1
@@ -44,12 +44,12 @@ def learn(nazir_ip, mix_ip, data, m):
                 #some of the outgoing IP is the one he wants to talk with
                 if found_nazir:
                     set_i = set(mix_outgoing[len(mix_outgoing) - 1])
-                    if set_is_disjoint(mix_outgoing_with_nazir_src, set_i):
+                    if set_is_disjoint(mix_outgoing_with_nazir_src, set_i) and len(mix_outgoing_with_nazir_src) < m:
                         mix_outgoing_with_nazir_src.append(set_i)
                     #if got_enough_disjoint_sets(mix_outgoing_with_nazir_src, m):
                     #    break
-                    if len(mix_outgoing_with_nazir_src) == m:
-                        break
+                    #if len(mix_outgoing_with_nazir_src) == m:
+                        #break
                 mix_outgoing.append([])
             mix_outgoing[len(mix_outgoing) - 1].append(ip_dst)
 
@@ -68,48 +68,33 @@ def set_is_disjoint(sets, set_i):
     return True
 
 def exclude(distinct_sets, all_sets):
-    while distinct_set_sizes_not_one(distinct_sets):
-        for set_R in all_sets:
-            index_i_union_non_empty = -1
-            set_R = set(set_R)
-            duplicate = False
-            for i in range(len(distinct_sets)):
-                if not set_R.isdisjoint(distinct_sets[i]):
-                    if index_i_union_non_empty == -1 and not index_i_union_non_empty == i:
-                        index_i_union_non_empty = i
-                    else:
-                        print("already found a non empty set, skip")
-                        duplicate = True
-                        break
-
-            if not duplicate:
-                distinct_sets[index_i_union_non_empty] = set_R.intersection(distinct_sets[index_i_union_non_empty])
-            if not distinct_set_sizes_not_one(distinct_sets):
-                break
+    #while distinct_set_sizes_not_one(distinct_sets):
+    for set_R in all_sets:
+        index_i_union_non_empty = -1
+        set_R = set(set_R)
+        duplicate = False
+        for i in range(len(distinct_sets)):
+            #print(set_R)
+            #print(distinct_sets[i])
+            if not set_R.isdisjoint(distinct_sets[i]):
+                if index_i_union_non_empty == -1:
+                    index_i_union_non_empty = i
+                else:
+                    duplicate = True
+                    break
+        if not duplicate and not index_i_union_non_empty == -1:
+            distinct_sets[index_i_union_non_empty] = distinct_sets[index_i_union_non_empty].intersection(set_R)
+        if not distinct_set_sizes_not_one(distinct_sets):
+            break
+    print(len(distinct_sets))
     return distinct_sets
 
 
 def distinct_set_sizes_not_one(distinct_sets):
     for set_i in distinct_sets:
-        if len(set_i) > 1:
+        if not len(set_i) == 1:
             return True
     return False
-
-
-
-
-    for i in range(len(dinstinct_sets)):
-        for j in range(len(all_sets)):
-            set_R = all_sets[j]
-            if not j == index_j_union_non_empty:
-                set_intersection = set_R.intersection(dinstinct_sets[i])
-                if len(set_intersection) > 0:
-                    if index_i_union_non_empty >= 0:
-                        #we found a duplicate set, skip this R
-                        break
-                    index_i_union_non_empty = i
-                    set_intersection_saved = set_intersection
-
 
 
 
