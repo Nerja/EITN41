@@ -84,17 +84,16 @@ def exclude(distinct_sets, all_sets):
                     break
         if not duplicate and not index_i_union_non_empty == -1:
             distinct_sets[index_i_union_non_empty] = distinct_sets[index_i_union_non_empty].intersection(set_R)
-        if not distinct_set_sizes_not_one(distinct_sets):
+        if distinct_sets_size_one(distinct_sets):
             break
     print(len(distinct_sets))
     return distinct_sets
 
-
-def distinct_set_sizes_not_one(distinct_sets):
+def distinct_sets_size_one(distinct_sets):
     for set_i in distinct_sets:
         if not len(set_i) == 1:
-            return True
-    return False
+            return False
+    return True
 
 
 
