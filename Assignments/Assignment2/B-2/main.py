@@ -22,7 +22,6 @@ def main(nazir_ip, mix_ip, nbr_partners, data):
 
 
 
-
 def learn(nazir_ip, mix_ip, data, m):
     last_ip_src = 0
     last_ip_dst = 0
@@ -46,6 +45,7 @@ def learn(nazir_ip, mix_ip, data, m):
                     set_i = set(mix_outgoing[len(mix_outgoing) - 1])
                     if set_is_disjoint(mix_outgoing_with_nazir_src, set_i) and len(mix_outgoing_with_nazir_src) < m:
                         mix_outgoing_with_nazir_src.append(set_i)
+                        mix_outgoing.pop()
                     #if got_enough_disjoint_sets(mix_outgoing_with_nazir_src, m):
                     #    break
                     #if len(mix_outgoing_with_nazir_src) == m:
@@ -68,6 +68,7 @@ def set_is_disjoint(sets, set_i):
     return True
 
 def exclude(distinct_sets, all_sets):
+
     #while distinct_set_sizes_not_one(distinct_sets):
     for set_R in all_sets:
         index_i_union_non_empty = -1
@@ -86,7 +87,7 @@ def exclude(distinct_sets, all_sets):
             distinct_sets[index_i_union_non_empty] = distinct_sets[index_i_union_non_empty].intersection(set_R)
         if distinct_sets_size_one(distinct_sets):
             break
-    print(len(distinct_sets))
+
     return distinct_sets
 
 def distinct_sets_size_one(distinct_sets):
