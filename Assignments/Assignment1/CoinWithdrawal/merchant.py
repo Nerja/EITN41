@@ -38,6 +38,10 @@ class Merchant:
 
         #This is done merchant!
         f_prod = numpy.prod(list(map(lambda v:common.f(v[0], v[1]), zip(xi, yi))))
-        print("Done by merchant! h(x) signed:\t{}".format((f_prod % self.n)))
-        print("Done by merchant! decrypt:\t{}".format( (self.serial ** self.e) % self.n))
-        return (f_prod % self.n) % self.n == (self.serial ** self.e) % self.n
+
+        hx      = f_prod % self.n
+        dec_hx  = (self.serial ** self.e) % self.n
+
+        print("Done by merchant! h(x) signed:\t{}".format(hx))
+        print("Done by merchant! decrypt:\t{}".format(dec_hx))
+        return hx == dec_hx

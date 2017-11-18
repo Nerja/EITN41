@@ -15,17 +15,27 @@ class Alice:
     def request_public_rsa(self, bank):
         self.n, self.e = bank.send_public_rsa()
 
+    def gen_ri(self):
+        retry   = True
+        nbr     = 0
+        while retry:
+            nbr = r.randint(1, self.n-1)
+            retry = m.gcd(nbr, self.n) != 1
+        return nbr
+
     def generate_2k(self):
         # Client generates 2k (ai, ci, di, ri)
+        #retry = True
+        #while retry:
         self.quads = [(r.randint(1, self.n-1),
                        r.randint(1, self.n-1),
                        r.randint(1, self.n-1),
-                       r.randint(1, self.n-1)
+                       self.gen_ri()
                        ) for i in range(2*self.k)]
-        #The extended Euclidean algorithm is particularly useful when a and b are coprime
-        #we will use the algorithm with a = product of r:s, b = n so we need gcd(prod r, n) == 1
-        if(m.gcd(numpy.prod([q[3] for q in self.quads]), self.n) != 1):
-            self.generate_2k()
+            #The extended Euclidean algorithm is particularly useful when a and b are coprime
+            #we will use the algorithm with a = product of r:s, b = n so we need gcd(prod r, n) == 1
+            #retry = m.gcd(numpy.prod([q[3] for q in self.quads]), self.n) != 1
+            #speedup with individual
 
     def compute_bi(self):
         self.x, self.y = common.compute_xi_yi(self.quads, self.id)
