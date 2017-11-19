@@ -2,17 +2,28 @@
 
 from pcapfile import savefile
 
-testcap = open('test.pcap', 'rb')
+testcap = open('cia.log.1337.pcap', 'rb')
 capfile = savefile.load_savefile(testcap, layers=2, verbose=True)
-
+nazir_ip = '159.237.13.37'
+mix_ip = '94.147.150.188'
 # print the packets
-print ('timestamp\teth src\t\t\teth dst\t\t\tIP src\t\tIP dst')
+last_ip_src = 0
+last_ip_dst = 0
+print ('timestamp\t\t\tIP src\t\tIP dst')
 for pkt in capfile.packets:
+
     timestamp = pkt.timestamp
-    # all data is ASCII encoded (byte arrays). If we want to compare with strings
-    # we need to decode the byte arrays into UTF8 coded strings
-    eth_src = pkt.packet.src.decode('UTF8')
-    eth_dst = pkt.packet.dst.decode('UTF8')
+
     ip_src = pkt.packet.payload.src.decode('UTF8')
     ip_dst = pkt.packet.payload.dst.decode('UTF8')
-    print ('{}\t\t{}\t{}\t{}\t{}'.format(timestamp, eth_src, eth_dst, ip_src, ip_dst))
+
+    if ip_src == nazir_ip:
+        print("Originating from NAZIR:")
+    if ip_src == mix_ip and not ip_src == last_ip_src:
+        print("New batch of outgoing messages from mix")
+    elif ip_dst == mix_ip and not ip_dst == last_ip_dst:
+        print("New batch of incoming messages to mix")
+
+    print ('{}\t\t\t{}\t\t{}'.format(timestamp, ip_src, ip_dst))
+    last_ip_src = ip_src
+    last_ip_dst = ip_dst

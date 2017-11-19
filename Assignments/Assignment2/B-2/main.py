@@ -7,9 +7,8 @@ def main(nazir_ip, mix_ip, nbr_partners, data):
     testcap = open(data, 'rb')
     capfile = savefile.load_savefile(testcap, layers=2, verbose=True)
 
-    distinct_outgoing_sets_with_nazir_src, all_outgoing_sets_with_nazir_src = learn(nazir_ip, mix_ip, capfile, nbr_partners)
-
-    ips = exclude(distinct_outgoing_sets_with_nazir_src, all_outgoing_sets_with_nazir_src)
+    all_sets, distinct_sets = learn(nazir_ip, mix_ip, capfile, nbr_partners)
+    ips = exclude(distinct_sets, all_sets)
 
     print("Found the following partners of Nazir:")
     sum = 0
@@ -25,41 +24,45 @@ def main(nazir_ip, mix_ip, nbr_partners, data):
 def learn(nazir_ip, mix_ip, data, m):
     last_ip_src = 0
     last_ip_dst = 0
-    mix_outgoing = []
-    mix_outgoing_with_nazir_src = []
-    found_nazir = 0
+
+    outgoing_distinct = []
+    outgoing_all = []
+    all_batches = []
+    nazir_in_incoming = 0
+    n_count = 0
 
     for pkt in data.packets:
-
         ip_src = pkt.packet.payload.src.decode('UTF8')
         ip_dst = pkt.packet.payload.dst.decode('UTF8')
 
-        if ip_src == nazir_ip:
-            found_nazir = 1
-        if ip_src == mix_ip:
+        timestamp = pkt.timestamp
+        #We got a new incoming batch, reset nazir_in_incoming
+        #Same thing as the last outgoing batch is finished.
+        if ip_dst == mix_ip and not ip_dst == last_ip_dst:
+            #New incoming batch, if nazir was in our last incoming_batch
+            #We should save the current outgoing batch
+
+            if nazir_in_incoming:
+                new_set = all_batches[len(all_batches) - 1]
+                outgoing_all.append(new_set)
+                if len(outgoing_distinct) < m and set_is_disjoint(outgoing_distinct, new_set):
+                    outgoing_distinct.append(new_set)
+
+            nazir_in_incoming = 0
+        elif ip_src == mix_ip:
             if not ip_src == last_ip_src:
                 #We got a new batch of outgoing messages
-                #if we found nazir src_ip in the incoming messages, this means that
-                #some of the outgoing IP is the one he wants to talk with
-                if found_nazir:
-                    set_i = set(mix_outgoing[len(mix_outgoing) - 1])
-                    if set_is_disjoint(mix_outgoing_with_nazir_src, set_i) and len(mix_outgoing_with_nazir_src) < m:
-                        mix_outgoing_with_nazir_src.append(set_i)
-                        mix_outgoing.pop()
-                    #if got_enough_disjoint_sets(mix_outgoing_with_nazir_src, m):
-                    #    break
-                    #if len(mix_outgoing_with_nazir_src) == m:
-                        #break
-                mix_outgoing.append([])
-            mix_outgoing[len(mix_outgoing) - 1].append(ip_dst)
+                all_batches.append(set())
+            all_batches[len(all_batches) - 1].add(ip_dst)
 
-        elif ip_dst == mix_ip and not ip_dst == last_ip_dst:
-            found_nazir = 0
 
+        if ip_src == nazir_ip:
+            nazir_in_incoming = 1
 
         last_ip_src = ip_src
         last_ip_dst = ip_dst
-    return mix_outgoing_with_nazir_src, mix_outgoing
+
+    return outgoing_all, outgoing_distinct
 
 def set_is_disjoint(sets, set_i):
     for set_j in sets:
@@ -71,20 +74,17 @@ def exclude(distinct_sets, all_sets):
 
     #while distinct_set_sizes_not_one(distinct_sets):
     for set_R in all_sets:
-        index_i_union_non_empty = -1
-        set_R = set(set_R)
+        idx_when_union_not_empty = -1
         duplicate = False
         for i in range(len(distinct_sets)):
-            #print(set_R)
-            #print(distinct_sets[i])
             if not set_R.isdisjoint(distinct_sets[i]):
-                if index_i_union_non_empty == -1:
-                    index_i_union_non_empty = i
+                if idx_when_union_not_empty == -1:
+                    idx_when_union_not_empty = i
                 else:
                     duplicate = True
                     break
-        if not duplicate and not index_i_union_non_empty == -1:
-            distinct_sets[index_i_union_non_empty] = distinct_sets[index_i_union_non_empty].intersection(set_R)
+        if not duplicate and not idx_when_union_not_empty == -1:
+            distinct_sets[idx_when_union_not_empty] = distinct_sets[idx_when_union_not_empty].intersection(set_R)
         if distinct_sets_size_one(distinct_sets):
             break
 
