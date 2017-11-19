@@ -9,3 +9,5 @@ script:
   - python3 luhn_test.py
   - cd ../MerkleTrees/
   - python3 merkle_test.py
+  - cd ../CoinWithdrawal/
+  - python3 coin_test.py

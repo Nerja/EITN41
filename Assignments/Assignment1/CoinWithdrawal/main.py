@@ -37,8 +37,10 @@ def start_simulation(alice, bank, merchant):
         merchant.request_public_rsa(bank)
         if merchant.verify():
             print("Merchant verified coin signature successfully")
+            return True
         else:
             print("Merchant FAILED to verify coin signature")
+            return False
 
 def main():
     k   = 2
@@ -48,7 +50,7 @@ def main():
     bank = Bank()
     merchant = Merchant()
 
-    start_simulation(alice, bank, merchant)
+    return start_simulation(alice, bank, merchant)
 
 
 if __name__ == "__main__":
