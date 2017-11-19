@@ -62,41 +62,33 @@ def learn(nazir_ip, mix_ip, data, m):
         last_ip_src = ip_src
         last_ip_dst = ip_dst
 
-    return outgoing_all, outgoing_distinct
+    return [e for e in outgoing_all if not e in outgoing_distinct], outgoing_distinct
 
 def set_is_disjoint(sets, set_i):
-    for set_j in sets:
-        if not set_j.isdisjoint(set_i):
-            return False
-    return True
+    return all([s.isdisjoint(set_i) for s in sets])
 
 def exclude(distinct_sets, all_sets):
 
     #while distinct_set_sizes_not_one(distinct_sets):
     for set_R in all_sets:
-        idx_when_union_not_empty = -1
+        index_i = -1
         duplicate = False
         for i in range(len(distinct_sets)):
             if not set_R.isdisjoint(distinct_sets[i]):
-                if idx_when_union_not_empty == -1:
-                    idx_when_union_not_empty = i
+                if index_i == -1:
+                    index_i = i
                 else:
                     duplicate = True
                     break
-        if not duplicate and not idx_when_union_not_empty == -1:
-            distinct_sets[idx_when_union_not_empty] = distinct_sets[idx_when_union_not_empty].intersection(set_R)
+        if not duplicate and not index_i == -1:
+            distinct_sets[index_i] = distinct_sets[index_i].intersection(set_R)
         if distinct_sets_size_one(distinct_sets):
             break
 
     return distinct_sets
 
 def distinct_sets_size_one(distinct_sets):
-    for set_i in distinct_sets:
-        if not len(set_i) == 1:
-            return False
-    return True
-
-
+    return all([len(s) == 1 for s in distinct_sets])
 
 if __name__ == "__main__":
     main('159.237.13.37', '94.147.150.188', 2, 'cia.log.1337.pcap')
