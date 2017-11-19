@@ -1,0 +1,13 @@
+ HA2 Quiz: B3, Hidden services
+ HA2 Quiz: C, First vs. Second Generation Onion Routing
+
+ Test Quiz: Threshold Scheme
+ Test Quiz: Paillier
+ HA3 Upload: B1, Commitment Scheme Assignment
+ HA3 Quiz: B2, Threshold Scheme
+ HA3 Quiz: B3, Notions of Security
+ HA3 Quiz: C, Paillier
+
+ HA4 ALL
+
+ HA5 ALL
