@@ -2,6 +2,8 @@ language: python
 python:
   - "3.6"
 cache: pip
+before_script:
+  - sudo pip3 install pypcapfile
 script:
   - cd Assignments/Assignment0/
   - python3 converter_test.py
