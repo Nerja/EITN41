@@ -13,5 +13,5 @@ script:
   - python3 merkle_test.py
   - cd ../CoinWithdrawal/
   - python3 coin_test.py
-  - cd ../../Assignment2/B-2-Marcus
+  - cd ../../Assignment3/B-1
   - python3 test.py
