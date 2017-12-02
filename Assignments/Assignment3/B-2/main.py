@@ -13,12 +13,12 @@ def find_secret(points):
     return int(sum(list(map(lambda pi: i_term(pi, points), points))))
 
 def define_inputs():
-    k                       = 5
-    n                       = 8
+    k                       = 4
+    n                       = 6
     your_idx                = 1
-    your_poly               = [13, 8, 11, 1, 5]
-    received_points         = [75, 75, 54, 52, 77, 54, 43]
-    received_master_points  = [(2, 2782), (4, 30822), (5, 70960), (7, 256422)]
+    your_poly               = [2, 12, 20, 18]
+    received_points         = [44, 23, 34, 41, 42]
+    received_master_points  = [(3, 2930), (5, 11816), (6, 19751)]
     return k, n, your_idx, your_poly, received_points, received_master_points
 
 def compute_term(cp, x):

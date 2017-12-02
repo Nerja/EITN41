@@ -43,5 +43,14 @@ class TestConverter(unittest.TestCase):
         received_master_points  = [(4, 1385), (5, 2028)]
         self.assertEqual(53, main.run_instance(k, n, your_idx, your_poly, received_points, received_master_points))
 
+    def test_q_marcus(self):
+        k                       = 4
+        n                       = 6
+        your_idx                = 1
+        your_poly               = [2, 12, 20, 18]
+        received_points         = [44, 23, 34, 41, 42]
+        received_master_points  = [(3, 2930), (5, 11816), (6, 19751)]
+        self.assertEqual(41, main.run_instance(k, n, your_idx, your_poly, received_points, received_master_points))
+
 if __name__ == "__main__":
     unittest.main()
