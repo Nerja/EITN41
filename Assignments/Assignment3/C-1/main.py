@@ -8,10 +8,10 @@ __author__ = "Marcus Rodan & Niklas Jönsson"
 # In Z_n "-x" is written as "n - x"
 
 def define_inputs():
-    p           = 1117
-    q           = 1471
-    g           = 652534095028
-    vote_file   = 'votes'
+    p           = 5
+    q           = 7
+    g           = 867
+    vote_file   = 'test_instr_votes'
     return p, q, g, vote_file
 
 def read_encrypted_votes(vote_file):
@@ -37,6 +37,7 @@ def compute_mu(g, lam, n):
 
 def generate_key(p, q, g):
     n   = p * q
+    print(n)
     lam = compute_lambda(p, q)
     mu  = compute_mu(g, lam, n)
     return n, lam, mu

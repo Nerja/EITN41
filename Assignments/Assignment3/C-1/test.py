@@ -34,5 +34,9 @@ class TestConverter(unittest.TestCase):
         #note n = 1643107 so 1643107 -> 1643104 means -3!
         self.assertEqual(32, main.run_instance(5, 7, 867, 'test_instr_votes'))
 
+    def test_instr_case(self):
+        #note n = 1643107 so 1643107 -> 1643104 means -3!
+        self.assertEqual(1643102, main.run_instance(1117, 1471, 652534095028, 'test_live_quiz_marcus_votes'))
+
 if __name__ == "__main__":
     unittest.main()
