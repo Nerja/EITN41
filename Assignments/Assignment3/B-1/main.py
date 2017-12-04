@@ -12,41 +12,35 @@ def hash_string(str, X):
 def hash_k_v(k, v, X):
     return hash_string(k + v, X)
 
-def all_possible(k):
-    if k <= 0:
-        return []
-    elif k == 1:
-        return ['0', '1']
-    else:
-        tail_list = all_possible(k-1)
-        my_list   = []
-        for te in tail_list:
-            my_list += ['1' + te]
-            my_list += ['0' + te]
-        return my_list
-
-def nbr_collisions(kv_hash, gen_len):
-    X           = len(kv_hash)
-    return sum([1 if hash_string(comb, X) == kv_hash else 0 for comb in all_possible(gen_len)])
-
 def rand_bin(len):
     return ''.join([str(random.randint(0,1)) for i in range(len)])
 
-def run_instance(X):
-    k_nbits   = 16
-    v_nbits   = 1
+def generate_instance(X, k_nbits, v_nbits):
     k_v_len   = k_nbits + v_nbits
 
     k   = rand_bin(k_nbits)
     v   = rand_bin(v_nbits)
     kv_hash     = hash_k_v(k, v, X)
-    nbr_colls   = nbr_collisions(kv_hash, k_v_len)
-    nbr_comb    = 2 ** k_v_len
+    return k, v, kv_hash
 
-    prob_bind = (nbr_colls - 1) / nbr_comb                 # All but one is wrong(breaking bind)
-    prob_conc = (nbr_colls / nbr_comb) * (1 / nbr_colls)   # P(find collision) * P(right collision)
+def run_instance(X):
+    k_nbits   = 16
+    v_nbits   = 1
+    k, v, hash = generate_instance(X, k_nbits, v_nbits)
+    other_v    = str(0 if v == 1 else 1)
 
-    return prob_bind, prob_conc
+    bind_run = True
+    conc_run = False
+    bind_cnt = 0
+    conc_cnt = 1
+    while bind_run or conc_run:
+        r_k = rand_bin(k_nbits)
+        if(bind_run):
+            if hash_k_v(r_k, other_v, X) == hash:
+                bind_run = False
+            bind_cnt += 1
+
+    return 1.0/bind_cnt, 1.0/conc_cnt
 
 
 def simulate(X, nbr_runs):
@@ -65,16 +59,11 @@ def plot_probabilities(X_list, probs):
     bind_probs = [p[0] for p in probs]
     conc_probs = [p[1] for p in probs]
 
-    theory_bind = list(map(lambda xlen: 2 ** (-1 * xlen), X_list))
-    theory_conc = list(map(lambda xlen: 1 / (2 ** 17) , X_list))
-
     plt.figure('Binding')
     plt.plot(X_list, bind_probs, '-o')
-    plt.plot(X_list, theory_bind, 'r--')
 
     plt.figure('Concealing')
     plt.plot(X_list, conc_probs, '-o')
-    plt.plot(X_list, theory_conc, 'r--')
     plt.show()
 
 def print_stats(X_probs):
@@ -88,7 +77,7 @@ if __name__ == "__main__":
 
     # Settings
     upper_X_lim = 10
-    nbr_runs    = 3
+    nbr_runs    = 400
 
     X_list = range(1,upper_X_lim+1)
     probs  = list(map(lambda X: simulate(X, nbr_runs), X_list))
