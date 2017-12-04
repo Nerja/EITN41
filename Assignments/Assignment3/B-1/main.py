@@ -38,23 +38,20 @@ def generate_instance(X, k_nbits, v_nbits):
     return k, v, kv_hash
 
 def run_instance(X):
+    print('.')
     k_nbits   = 16
     v_nbits   = 1
     k, v, hash = generate_instance(X, k_nbits, v_nbits)
     other_v    = str(0 if v == 1 else 1)
     allp_k      = all_possible(k_nbits)
 
-    bind_cnt    = 0
-    for r_k in allp_k:
-        bind_cnt += 1
-        if hash_k_v(r_k, other_v, X) == hash:
-            break
+    broke_bind = any(map(lambda r_k: hash_k_v(r_k, other_v, X)==hash, allp_k))
 
     any_true    = any(map(lambda r_k: hash_k_v(r_k, '1', X) == hash, allp_k))
     any_false   = any(map(lambda r_k: hash_k_v(r_k, '1', X) == hash, allp_k))
-    broke       = (any_true and not any_false) or (any_false and not any_true)
+    broke_conc       = (any_true and not any_false) or (any_false and not any_true)
 
-    return 1.0/bind_cnt, 1.0 if broke else 0.0
+    return 1.0 if broke_bind else 0.0, 1.0 if broke_conc else 0.0
 
 
 def simulate(X, nbr_runs):
@@ -80,10 +77,11 @@ if __name__ == "__main__":
     print('Computing please wait ...')
 
     # Settings
-    upper_X_lim = 10
-    nbr_runs    = 400
+    upper_X_lim = 20
+    lower_X_lim = 15
+    nbr_runs    = 20
 
-    X_list = range(1,upper_X_lim+1)
+    X_list = range(lower_X_lim,upper_X_lim+1)
     probs  = list(map(lambda X: simulate(X, nbr_runs), X_list))
 
     # Print stats
