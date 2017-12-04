@@ -16,6 +16,19 @@ def hash_k_v(k, v, X):
 def rand_bin(len):
     return ''.join([str(random.randint(0,1)) for i in range(len)])
 
+def all_possible(k):
+    if k <= 0:
+        return []
+    elif k == 1:
+        return ['0', '1']
+    else:
+        tail_list = all_possible(k-1)
+        my_list   = []
+        for te in tail_list:
+            my_list += ['1' + te]
+            my_list += ['0' + te]
+        return my_list
+
 def generate_instance(X, k_nbits, v_nbits):
     k_v_len   = k_nbits + v_nbits
 
@@ -31,17 +44,20 @@ def run_instance(X):
     other_v    = str(0 if v == 1 else 1)
 
     bind_run = True
-    conc_run = False
     bind_cnt = 0
-    conc_cnt = 1
-    while bind_run or conc_run:
+    while bind_run:
         r_k = rand_bin(k_nbits)
         if(bind_run):
             if hash_k_v(r_k, other_v, X) == hash:
                 bind_run = False
             bind_cnt += 1
 
-    return 1.0/bind_cnt, 1.0/conc_cnt
+    allp_k      = all_possible(k_nbits)
+    any_true    = any(map(lambda r_k: hash_k_v(r_k, '1', X) == hash, allp_k))
+    any_false   = any(map(lambda r_k: hash_k_v(r_k, '1', X) == hash, allp_k))
+    broke       = (any_true and not any_false) or (any_false and not any_true)
+
+    return 1.0/bind_cnt, 1.0 if broke else 0.0
 
 
 def simulate(X, nbr_runs):
@@ -61,7 +77,7 @@ def print_stats(X_probs):
     X           = X_probs[0]
     prob_bind   = X_probs[1][0]
     prob_conc   = X_probs[1][1]
-    print("X = {} => Prob binding:\t\t{}\nProb concealing:\t{}\n".format(X, prob_bind, prob_conc))
+    print("X = {}\nProb binding:\t\t{}\nProb concealing:\t{}\n".format(X, prob_bind, prob_conc))
 
 if __name__ == "__main__":
     print('Computing please wait ...')
