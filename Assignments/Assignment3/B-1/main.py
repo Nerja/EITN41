@@ -42,17 +42,14 @@ def run_instance(X):
     v_nbits   = 1
     k, v, hash = generate_instance(X, k_nbits, v_nbits)
     other_v    = str(0 if v == 1 else 1)
-
-    bind_run = True
-    bind_cnt = 0
-    while bind_run:
-        r_k = rand_bin(k_nbits)
-        if(bind_run):
-            if hash_k_v(r_k, other_v, X) == hash:
-                bind_run = False
-            bind_cnt += 1
-
     allp_k      = all_possible(k_nbits)
+
+    bind_cnt    = 0
+    for r_k in allp_k:
+        bind_cnt += 1
+        if hash_k_v(r_k, other_v, X) == hash:
+            break
+
     any_true    = any(map(lambda r_k: hash_k_v(r_k, '1', X) == hash, allp_k))
     any_false   = any(map(lambda r_k: hash_k_v(r_k, '1', X) == hash, allp_k))
     broke       = (any_true and not any_false) or (any_false and not any_true)
