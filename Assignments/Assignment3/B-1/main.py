@@ -2,6 +2,7 @@ import random
 import hashlib
 import binascii
 import matplotlib.pyplot as plt
+import statistics
 
 __author__ = "Marcus Rodan & Niklas Jönsson"
 
@@ -44,33 +45,23 @@ def run_instance(X):
 
 
 def simulate(X, nbr_runs):
-    prob_bind   = 0
-    prob_conc   = 0
-
-    print("Simulating for X = {}".format(X))
-    for i in range(0, nbr_runs):
-        i_p_b, i_p_c = run_instance(X)
-        prob_bind += i_p_b
-        prob_conc += i_p_c
-
-    return prob_bind/nbr_runs, prob_conc/nbr_runs
+    print("Running for X = {}".format(X))
+    probs = list(map(lambda i: run_instance(X), range(nbr_runs)))
+    return statistics.mean([p[0] for p in probs]), statistics.mean([p[1] for p in probs])
 
 def plot_probabilities(X_list, probs):
-    bind_probs = [p[0] for p in probs]
-    conc_probs = [p[1] for p in probs]
-
     plt.figure('Binding')
-    plt.plot(X_list, bind_probs, '-o')
+    plt.plot(X_list, [p[0] for p in probs], '-o')
 
     plt.figure('Concealing')
-    plt.plot(X_list, conc_probs, '-o')
+    plt.plot(X_list, [p[1] for p in probs], '-o')
     plt.show()
 
 def print_stats(X_probs):
     X           = X_probs[0]
     prob_bind   = X_probs[1][0]
     prob_conc   = X_probs[1][1]
-    print("Prob binding:\t\t{}\nProb concealing:\t{}\n".format(prob_bind, prob_conc))
+    print("X = {} => Prob binding:\t\t{}\nProb concealing:\t{}\n".format(X, prob_bind, prob_conc))
 
 if __name__ == "__main__":
     print('Computing please wait ...')
