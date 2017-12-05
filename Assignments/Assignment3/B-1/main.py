@@ -3,18 +3,9 @@ import hashlib
 import binascii
 import matplotlib.pyplot as plt
 import statistics
+import matplotlib.pyplot as plt
 
 __author__ = "Marcus Rodan & Niklas Jönsson"
-
-def hash_string(str, X):
-    hex_hash = hashlib.sha1(bytes(str, encoding='utf-8')).hexdigest()
-    return ''.join(list(map(lambda hv: bin(int(hv, 16))[2:].zfill(4), hex_hash)))[:X]
-
-def hash_k_v(k, v, X):
-    return hash_string(k + v, X)
-
-def rand_bin(len):
-    return ''.join([str(random.randint(0,1)) for i in range(len)])
 
 def all_possible(k):
     if k <= 0:
@@ -29,63 +20,84 @@ def all_possible(k):
             my_list += ['0' + te]
         return my_list
 
-def generate_instance(X, k_nbits, v_nbits):
-    k_v_len   = k_nbits + v_nbits
+def hash_string(str):
+    hex_hash = hashlib.sha1(bytes(str, encoding='utf-8')).hexdigest()
+    return ''.join(list(map(lambda hv: bin(int(hv, 16))[2:].zfill(4), hex_hash)))
 
-    k   = rand_bin(k_nbits)
-    v   = rand_bin(v_nbits)
-    kv_hash     = hash_k_v(k, v, X)
-    return k, v, kv_hash
+def hash_k_v(k, v):
+    return hash_string(k + v)
 
-def run_instance(X):
-    print('.')
-    k_nbits   = 16
-    v_nbits   = 1
-    k, v, hash = generate_instance(X, k_nbits, v_nbits)
-    other_v    = str(0 if v == 1 else 1)
-    allp_k      = all_possible(k_nbits)
+def bind_coll_exists(hash_table, X):
+    v_0_set = set(hash_table[0])
+    v_1_set = set(hash_table[1])
+    return not v_0_set.isdisjoint(v_1_set)
 
-    broke_bind = any(map(lambda r_k: hash_k_v(r_k, other_v, X)==hash, allp_k))
+def nbr_solo(list):
+    cnt_dict = {}
 
-    any_true    = any(map(lambda r_k: hash_k_v(r_k, '1', X) == hash, allp_k))
-    any_false   = any(map(lambda r_k: hash_k_v(r_k, '1', X) == hash, allp_k))
-    broke_conc       = (any_true and not any_false) or (any_false and not any_true)
+    for x in list:
+        cnt_dict[x] = cnt_dict.get(x, 0) + 1
 
-    return 1.0 if broke_bind else 0.0, 1.0 if broke_conc else 0.0
+    nbr_solo = 0
+    for _, cnt in cnt_dict.items():
+        if cnt == 1:
+            nbr_solo += 1
 
+    return nbr_solo
 
-def simulate(X, nbr_runs):
+def run_instance(hash_table, X):
     print("Running for X = {}".format(X))
-    probs = list(map(lambda i: run_instance(X), range(nbr_runs)))
-    return statistics.mean([p[0] for p in probs]), statistics.mean([p[1] for p in probs])
+    hash_table = list(map(lambda l: list(map(lambda v:v[:X], l)), hash_table))
 
-def plot_probabilities(X_list, probs):
+    found_bind_coll = bind_coll_exists(hash_table, X)
+
+    # Nån väljer (k, v) så att h((k, v)) unik i tabel
+    # Räknar antal unika hashes i tabell
+    # /
+    # Antal entries i tabell
+    hash_list = hash_table[0] + hash_table[1]
+    conc_prob = nbr_solo(hash_list) / len(hash_list)
+
+    bind_prob = 1.0 if found_bind_coll else 0.0
+    return {'bind':bind_prob, 'conc':conc_prob}
+
+def generate_table():
+    k_nbits   = 16 #16
+    v_nbits   = 1
+
+    table = []
+    table += [list(map(lambda k: hash_k_v('0', k), all_possible(k_nbits)))]
+    table += [list(map(lambda k: hash_k_v('1', k), all_possible(k_nbits)))]
+    return table
+
+def print_stats(data_pair):
+    X           = data_pair[0]
+    probs       = data_pair[1]
+    print("X = {}\nProb binding:\t\t{}\nProb concealing:\t{}\n".format(X, probs['bind'], probs['conc']))
+
+def plot_probabilities(data):
+    X_list = [d[0] for d in data]
+    bind_probs = [d[1]['bind'] for d in data]
+    conc_probs = [d[1]['conc'] for d in data]
+
     plt.figure('Binding')
-    plt.plot(X_list, [p[0] for p in probs], '-o')
+    plt.plot(X_list, bind_probs, '-o')
 
     plt.figure('Concealing')
-    plt.plot(X_list, [p[1] for p in probs], '-o')
+    plt.plot(X_list, conc_probs, '-o')
     plt.show()
 
-def print_stats(X_probs):
-    X           = X_probs[0]
-    prob_bind   = X_probs[1][0]
-    prob_conc   = X_probs[1][1]
-    print("X = {}\nProb binding:\t\t{}\nProb concealing:\t{}\n".format(X, prob_bind, prob_conc))
-
 if __name__ == "__main__":
-    print('Computing please wait ...')
+    hash_table = generate_table()
 
-    # Settings
-    upper_X_lim = 20
-    lower_X_lim = 15
-    nbr_runs    = 20
+    X_low   = 1
+    X_high  = 35
 
-    X_list = range(lower_X_lim,upper_X_lim+1)
-    probs  = list(map(lambda X: simulate(X, nbr_runs), X_list))
+    # Compute probabilties for different X
+    data = list(map(lambda X: (X, run_instance(hash_table, X)), range(X_low, X_high+1)))
 
-    # Print stats
-    list(map(print_stats, zip(X_list, probs)))
+    # Print probabilties
+    list(map(print_stats, data))
 
-    # Plot binding probability and concealing probability
-    plot_probabilities(X_list, probs)
+    # Plot probabilties
+    plot_probabilities(data)
