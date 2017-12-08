@@ -3,6 +3,7 @@ import ssl
 import regex
 import itertools
 import timeit
+import sys
 
 __author__ = "Marcus Rodan & Niklas Jönsson"
 
@@ -42,7 +43,11 @@ def try_all_hex(i, data, nbr_measurements):
     data['signature'] = signature
 
 if __name__ == "__main__":
-    data = {'name': 'Hanna', 'grade': 5, 'signature': 'XXXXXXXXXXXXXXXXXXXX'}
+    if(len(sys.argv) != 3):
+        print("use: main.py <name> <grade>")
+        sys.exit()
+
+    data = {'name': sys.argv[1], 'grade': sys.argv[2], 'signature': 'XXXXXXXXXXXXXXXXXXXX'}
     try_combination(data) #Yeah
 
     done                = False
