@@ -1,0 +1,6 @@
+
+* Marcus: Göra B-3 Quiz på Moodle
+* Skicka kod för B-3 till jonathan.sonnerup.lu@analys.urkund.se
+* C uppgiften
+* Skicka kod för C till jonathan.sonnerup.lu@analys.urkund.se
+* Båda: Göra C Quiz på Moodle
