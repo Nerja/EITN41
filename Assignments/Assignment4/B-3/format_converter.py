@@ -8,6 +8,9 @@ __author__ = "Marcus Rodan"
 def int_to_hex(int_nbr):
     return "0x{:08x}".format(int_nbr)
 
+def int2hex(int_nbr):
+    return "{:02x}".format(int_nbr)
+
 def int_to_bytearray(int_nbr, n_bytes):
     return bytearray(int_nbr.to_bytes(n_bytes, byteorder= 'big'))
 
