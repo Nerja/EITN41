@@ -56,7 +56,9 @@ def send(soc, nbr, text):
 
 def secure_send(soc, msg, text, secret):
     soc.send(format(encrypt(msg, secret), 'x').encode('utf8'))
-    print('sent ' + text + ': ', format(decrypt(soc.recv(4096).decode('utf8').strip(), secret), 'x'))
+    resp = soc.recv(4096).decode('utf8').strip()
+    print(resp)
+    #print('sent ' + text + ': ', format(decrypt(soc.recv(4096).decode('utf8').strip(), secret), 'x'))
 
 def receive(soc):
     return soc.recv(4096).decode('utf8').strip()
@@ -111,7 +113,7 @@ def main():
 
     #smp(soc, g1, p, secret)
     if smp_1(soc, g1, p, secret):
-        secure_send(soc, "1337", "enc_msg=1337", secret)
+        secure_send(soc, "1337", "enc_msg=1337", fc.int_to_hex(g_x1x2))
     else:
         print("x != y, aborting")
         sys.exit()
