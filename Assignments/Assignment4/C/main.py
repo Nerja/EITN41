@@ -1,6 +1,7 @@
 import socket
 import format_converter as fc
 import random
+import sys
 
 def shared_passphrase(g_xy):
     #g_xy and secret passphrase are byte arrays
@@ -35,7 +36,6 @@ def dh_keyexchange(soc, p, g):
     print("*** key exchange complete ***")
     return pow(g_x1, x2, p)
 
-
 def egcd(a, b):
     if a == 0:
         return (b, 0, 1)
@@ -50,10 +50,13 @@ def modinv(a, m):
     else:
         return x % m
 
-
 def send(soc, nbr, text):
     soc.send(format(nbr, 'x').encode('utf8'))
     print('sent ' + text + ': ', soc.recv(4096).decode('utf8').strip())
+
+def secure_send(soc, msg, text, secret):
+    soc.send(format(encrypt(msg, secret), 'x').encode('utf8'))
+    print('sent ' + text + ': ', format(decrypt(soc.recv(4096).decode('utf8').strip(), secret), 'x'))
 
 def receive(soc):
     return soc.recv(4096).decode('utf8').strip()
@@ -90,12 +93,11 @@ def smp_1(soc, g1, p, y):
     QaQb_inv_a3 = receive_nbr(soc)
     QaQb_inv_b3 = pow(Qa * modinv(Qb, p), b3, p)
     send(soc, QaQb_inv_b3, "QaQb_inv_b3")
-
-
-
-    print("*** auth = {} ***".format(receive(soc)))
-
+    res = receive(soc)
+    print("*** auth = {} ***".format(res))
+    return res == "ack"
     #Send Rb
+
 def main():
     soc = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     soc.connect(("eitn41.eit.lth.se", 1337))
@@ -108,7 +110,12 @@ def main():
     secret = shared_passphrase(g_x1x2)
 
     #smp(soc, g1, p, secret)
-    smp_1(soc, g1, p, secret)
+    if smp_1(soc, g1, p, secret):
+        secure_send(soc, "1337", "enc_msg=1337", secret)
+    else:
+        print("x != y, aborting")
+        sys.exit()
+
 
 if __name__ == "__main__":
     main()
