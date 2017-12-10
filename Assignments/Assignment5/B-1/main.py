@@ -23,7 +23,7 @@ def test():
 def run_instance(keyfile, enc_msg):
     keydata = read_keydata(keyfile)
 
-    OpenSSL.crypto.load_privatekey(FILETYPE_PEM, open(keyfile).read().strip())
+    OpenSSL.crypto.load_privatekey(OpenSSL.crypto.FILETYPE_PEM, open(keyfile).read().strip())
     #do some magic on censored parts
     censoredParts = regex.findall('censored', keydata)
     print(censoredParts)
