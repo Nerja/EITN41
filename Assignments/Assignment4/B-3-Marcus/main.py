@@ -24,9 +24,8 @@ def I2OSP(x, xLen):
 
     return bytearray(list(map(lambda i: int(x*((1/256)**i))%256, range(xLen)[::-1])))
 
-def hex_xor(h1, h2):
-    result_len = max(len(h1), len(h2))
-    return '{:x}'.format(int(h1, 16) ^ int(h2, 16)).zfill(result_len)
+def hex_xor(h1, h2, fixed_len):
+    return '{:x}'.format(int(h1, 16) ^ int(h2, 16)).zfill(fixed_len)
 
 def OAEP_encode(M, seed, L = ""):
     mLen    = len(M)//2
@@ -43,11 +42,11 @@ def OAEP_encode(M, seed, L = ""):
     DB = lHash + PS + '01' + M
 
     dbMask = MGF1(seed, k - hLen - 1)
-    maskedDB = hex_xor(DB, dbMask)
+    maskedDB = hex_xor(DB, dbMask, k - 2*hLen - 1)
 
     seedMask = MGF1(maskedDB, hLen)
 
-    maskedSeed = hex_xor(seed, seedMask)
+    maskedSeed = hex_xor(seed, seedMask, 2*hLen)
 
     return '00' + maskedSeed + maskedDB
 
@@ -71,10 +70,10 @@ def OAEP_decode(EM, L = ""):
     Y, maskedSeed, maskedDB = split_EM(EM, hLen, k)
 
     seedMask    = MGF1(maskedDB, hLen)
-    seed        = hex_xor(maskedSeed, seedMask)
+    seed        = hex_xor(maskedSeed, seedMask, 2*hLen)
 
     dbMask  = MGF1(seed, (k - hLen - 1))
-    DB      = hex_xor(dbMask, maskedDB)
+    DB      = hex_xor(dbMask, maskedDB, k - 2*hLen - 1)
 
     if lHash != DB[:hLen*2]:
         raise ValueError("decryption error")
