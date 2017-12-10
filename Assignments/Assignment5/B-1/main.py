@@ -4,6 +4,7 @@ import regex
 import re
 import base64
 import format_converter as fc
+import OpenSSL
 
 def b64chars():
     return "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
@@ -15,8 +16,14 @@ def read_keydata(file):
 def decrypt(msg, keydata):
     return msg
 
+def test():
+    b64chars = b64chars()
+
+
 def run_instance(keyfile, enc_msg):
     keydata = read_keydata(keyfile)
+
+    OpenSSL.crypto.load_privatekey(FILETYPE_PEM, open(keyfile).read().strip())
     #do some magic on censored parts
     censoredParts = regex.findall('censored', keydata)
     print(censoredParts)
