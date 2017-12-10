@@ -10,4 +10,8 @@
 - [ ] Urkund
 - [ ] Report to Moodle
 ### B-3
+- [ ] Upload code Urkund
+- [ ] Moodle quiestion
 ### C-1
+- [ ] Code to Urkund
+- [ ] Moodle question
