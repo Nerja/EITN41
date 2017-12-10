@@ -4,14 +4,14 @@
 
 ## Home Assignment 4
 ### B-1
+- [ ] Answer Moodle quiz
 ### B-2
-- [ ] Send in report
-- [ ] Moodle quiestion
-- [ ] Urkund
-- [ ] Report to Moodle
+- [X] Moodle question
+- [X] Urkund
+- [X] Report to Moodle
 ### B-3
-- [ ] Upload code Urkund
-- [ ] Moodle quiestion
+- [X] Upload code Urkund
+- [X] Moodle question
 ### C-1
 - [ ] Code to Urkund
-- [ ] Moodle question
+- [X] Moodle question
