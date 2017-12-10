@@ -5,9 +5,9 @@
 ## Home Assignment 4
 ### B-1
 ### B-2
-- [] Send in report
-- [] Moodle quiestion
-- [] Urkund
-- [] Report to Moodle
+- [ ] Send in report
+- [ ] Moodle quiestion
+- [ ] Urkund
+- [ ] Report to Moodle
 ### B-3
 ### C-1
