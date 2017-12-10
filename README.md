@@ -13,5 +13,20 @@
 - [X] Upload code Urkund
 - [X] Moodle question
 ### C-1
-- [ ] Code to Urkund
+- [X] Code to Urkund
 - [X] Moodle question
+
+## Home Assignment 5
+### B-1
+- [ ] Moodle quiz
+
+### B-2
+- [ ] Moodle quiz
+
+### B-3
+- [ ] Urkund
+- [ ] Moodle quiz
+
+### C-1
+- [ ] Urkund
+- [ ] Moodle quiz
