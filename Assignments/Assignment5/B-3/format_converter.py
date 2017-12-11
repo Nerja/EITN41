@@ -9,7 +9,9 @@ def int_to_hex(int_nbr):
     return "0x{:08x}".format(int_nbr)
 
 def int2hex(int_nbr):
-    return format(int_nbr, 'x')
+    v = format(int_nbr, 'x')
+
+    return v if len(v) % 2 == 0 else "0" + v
 
 def int_to_bytearray(int_nbr, n_bytes):
     return bytearray(int_nbr.to_bytes(n_bytes, byteorder= 'big'))
