@@ -25,6 +25,14 @@ def encode_key(p, q, e):
     exp1 = d % (p - 1)
     exp2 = d % (q - 1)
     coef = modinv(q, p)
+    print(n)
+    print(e)
+    print(d)
+    print(p)
+    print(q)
+    print(exp1)
+    print(exp2)
+    print(coef)
     return base64.b64encode(fc.hex_to_bytearray(der_encode(version) + der_encode(n) + der_encode(e) + der_encode(d) + der_encode(p) + der_encode(q) + der_encode(exp1) + der_encode(exp2) + der_encode(coef)))
 
 def der_encode(nbr):
