@@ -30,7 +30,7 @@ def encode_key(p, q, e):
     L = int(len(pem) / 2)
     seq = "30"
     if L > 127:
-        seq = seq + "81" + fc.int2hex(L) if L < 256 else seq + "82" + fc.int2hex(L)
+        seq = seq + "81" + fc.int2hex(L).zfill(2) if L < 256 else seq + "82" + fc.int2hex(L).zfill(4)
     else:
         seq = seq + fc.int2hex(L).zfill(2)
     print(seq)
