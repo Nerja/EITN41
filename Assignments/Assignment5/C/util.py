@@ -1,6 +1,3 @@
-__author__ = "Niklas Jönsson & Marcus Rodan"
-
-
 def egcd(a, b):
     if a == 0:
         return (b, 0, 1)
