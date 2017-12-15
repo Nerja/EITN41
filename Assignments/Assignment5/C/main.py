@@ -4,25 +4,15 @@ import hashlib
 import format_converter as fc
 import util
 
-def legendre_symbol(a, p):
-    if a == 0:
-        return 0
-
-
-
-    #-1 if a is a non-residue
-    #1 if a is a residue
-    #residue = if there exists a b such that a = b ** 2 mod p
-
 def id_val(pub_id, m):
-    a = hashlib.sha1(pub_id).hexdigest()
-    while util.jacobi(int(a, 16) % m, m) != 1:
-        a = hashlib.sha1(bytearray(a.encode('utf8'))).hexdigest()
-    return int(a, 16)
+    a = hashlib.sha1(pub_id).digest()
+    while util.jacobi(fc.bytearray_to_int(a) % m, m) != 1:
+        a = hashlib.sha1(a).digest()
+    return fc.bytearray_to_int(a) % m
 
 def PKG(a, m, p, q):
     exp = int((m + 5 - (p + q)) / 8)
-    return (a ** exp) % m
+    return int(a ** exp) % m
 
 def decrypt():
     return 0
@@ -34,9 +24,9 @@ def run_instance(pub_id, p, q, bits):
     m = p * q
     a = id_val(pub_id, m)
     print(format(a, 'x'))
-    r = PKG(a, m, p, q)
-    print(r)
-    return r
+    #r = PKG(a, m, p, q)
+    #print(r)
+    return 1
 '''
 The program should output the user’s private key in (as a hexadecimal string)
 as well as the decrypted bits, written as a number (in base 10).
