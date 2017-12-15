@@ -1,0 +1,12 @@
+
+for filename in stuff/*.msg; do
+  openssl cms -decrypt -in ${filename} -recip stuff/certreceiver.pem -inkey stuff/keyreceiver.pem -out ${filename}.txt
+  openssl cms -digest_verify -in ${filename}.txt > res 2>&1
+
+  if grep -q "Verification successful" res; then
+    echo ${filename} "is correct"
+    grep "Subject:" ${filename}.txt
+  fi
+
+  rm res
+done
