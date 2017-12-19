@@ -4,7 +4,7 @@
 
 ## Home Assignment 4
 ### B-1
-- [ ] Answer Moodle quiz
+- [X] Answer Moodle quiz
 ### B-2
 - [X] Moodle question
 - [X] Urkund
@@ -18,15 +18,15 @@
 
 ## Home Assignment 5
 ### B-1
-- [ ] Moodle quiz
+- [X] Moodle quiz
 
 ### B-2
-- [ ] Moodle quiz
+- [X] Moodle quiz
 
 ### B-3
-- [ ] Urkund
-- [ ] Moodle quiz
+- [X] Urkund
+- [X] Moodle quiz
 
 ### C-1
-- [ ] Urkund
-- [ ] Moodle quiz
+- [X] Urkund
+- [X] Moodle quiz
