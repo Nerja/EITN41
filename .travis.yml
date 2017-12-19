@@ -5,15 +5,4 @@ cache: pip
 install:
   - pip install -r requirements.txt
 script:
-  - cd Assignments/Assignment0/
-  - python3 converter_test.py
-  - cd ../Assignment1/Luhn/
-  - python3 luhn_test.py
-  - cd ../MerkleTrees/
-  - python3 merkle_test.py
-  - cd ../CoinWithdrawal/
-  - python3 coin_test.py
-  - cd ../../Assignment4/C-1
-  - python3 test.py
-  - cd ../B-3-Marcus
-  - python3 test.py
+  - find . -regex '.*test.*' -exec python3 {} \;
